@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import Menu from './MenuComponent';
 import Dishdetail from './DishdetailComponent';
 import { View, Platform } from 'react-native';
-import { createStackNavigator } from 'react-navigation';
-import { DISHES } from '../shared/dishes';
+import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
 
+import { Icon } from 'react-native-elements';
+import Home from './HomeComponent';
 
 const MenuNavigator = createStackNavigator({
     Menu: { screen: Menu },
@@ -24,14 +25,45 @@ const MenuNavigator = createStackNavigator({
     }
 );
 
+const HomeNavigator = createStackNavigator({
+    Home: { screen: Home }
+}, {
+    navigationOptions: ({ navigation }) => ({
+        headerStyle: {
+            backgroundColor: "#512DA8"
+        },
+        headerTitleStyle: {
+            color: "#fff"
+        },
+        headerTintColor: "#fff"
+    })
+});
+
+const MainNavigator = createDrawerNavigator({
+    Home:
+      {
+          screen: HomeNavigator,
+          navigationOptions: {
+              title: 'Home',
+              drawerLabel: 'Home'
+          }
+      },
+      Menu:
+        {
+            screen: MenuNavigator,
+            navigationOptions: {
+                title: 'Menu',
+                drawerLabel: 'Menu'
+            }
+        }
+}, {
+    drawerBackgroundColor: '#D1C4E9'
+})
 
 class Main extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      dishes: DISHES,
     
-    };
   }
 
  
@@ -42,7 +74,7 @@ class Main extends Component {
       return (
           <View style={{flex:1, paddingTop: Platform.OS === 'ios' ? 0 : 
              Expo.Constants.statusBarHeight }} >
-              <MenuNavigator />
+              <MainNavigator />
           </View>
       );
   }
